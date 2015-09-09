@@ -191,7 +191,7 @@ GeoImage::getImage()
 
   m_geometry->get_top_geo()->evaluate_pixel_coords(true,true);
   double pix_scale_size =m_geometry->get_pixel_scale_size ();
-  const int xy0_off_pix[2] = {1000,1000};
+  const int xy0_off_pix[2] = {2000,2000};
   //m_geometry->get_pixel_coord_indexes(iX, iY, isize);
   //m_geometry->get_pixel_coord_indexes(iX, iY, isize, ioname, ioindex, pix_scale_size_um, xy0_off_pix);
   m_geometry->get_pixel_coord_indexes(iX, iY, isize, std::string(), 0, pix_scale_size, xy0_off_pix);

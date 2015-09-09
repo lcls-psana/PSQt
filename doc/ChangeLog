@@ -11,6 +11,11 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V00-00-16
+2015-09-09 Mikhail S. Dubrovin
+- DragStore.cpp, GeoImage.cpp - increase (0,0) offset for big gaps like in pnccd (PSAS-34)
+	xy0_off_pix[2] and center_raw (1000,1000) -> (2000,2000)
+
 Tag: V00-00-15
 2015-04-02 Mikhail S. Dubrovin
 - code cleenup, cosmetic improvement of messages, in SConscript add DOCGEN

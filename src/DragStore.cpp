@@ -27,7 +27,7 @@ DragStore::DragStore(WdgImage* wimg)
 {
   //std::cout  << strTimeStamp() << " c-tor DragStore()\n";
 
-  QPointF center_raw(1000,1000);
+  QPointF center_raw(2000,2000);
   v_dragfigs.clear();
   v_dragfigs.push_back((DragFig){DragStore::Create(m_wimg, DRAGCENTER, &center_raw), DRAGCENTER, 0});
 
