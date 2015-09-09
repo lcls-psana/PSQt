@@ -130,6 +130,8 @@ WdgFile::onButFile()
   MsgInLog(_name_(), DEBUG, "onButFile");
 
   std::string str_path_file_edi = (m_edi_file -> displayText()).toStdString();
+
+  /*
   //dname =  "/reg/d/psdm/CXI/cxi49012/xtc/";
   if (str_path_file_edi.empty()) str_path_file_edi = "./";
 
@@ -137,13 +139,17 @@ WdgFile::onButFile()
   pos = (pos != std::string::npos) ? pos : str_path_file_edi.size();
 
   std::string dname(str_path_file_edi, 0, pos );
-  std::string fname(str_path_file_edi, pos+1 );
+  std::string fname(str_path_file_edi, pos);
 
   MsgInLog(_name_(), DEBUG, "dname: " + dname );
   MsgInLog(_name_(), DEBUG, "fname: " + fname );
   
   QString path_file = QFileDialog::getOpenFileName(this, tr("Select input file"), 
                                                    QString(dname.c_str()), tr(m_search_fmt.c_str()));
+  */
+
+  QString path_file = QFileDialog::getOpenFileName(this, tr("Select input file"), 
+                                                   QString(str_path_file_edi.c_str()), tr(m_search_fmt.c_str()));
 
   std::string str_path_file = path_file.toStdString();
 

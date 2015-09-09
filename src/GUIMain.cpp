@@ -44,7 +44,7 @@ GUIMain::GUIMain( QWidget *parent
 
   const bool pbits = 0;
 
-  m_file_geo  = new PSQt::WdgFile(this, "Set geometry", fname_geo, "*.data \n *", false);
+  m_file_geo  = new PSQt::WdgFile(this, "Set geometry", fname_geo, "*.txt *.data \n *", false);
   m_file_nda  = new PSQt::WdgFile(this, "Set ndarray",  fname_nda, "*.txt *.dat \n *", false);
   m_wgt       = new PSQt::WdgGeoTree(this, fname_geo, pbits);
   m_wge       = new PSQt::WdgGeo(this);
