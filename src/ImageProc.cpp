@@ -56,9 +56,9 @@ ImageProc::ImageProc()
 
 ImageProc::~ImageProc()
 {
-  if(p_rsum) delete [] p_rsum;
-  if(p_rsta) delete [] p_rsta;
-  if(p_ssta) delete [] p_ssta;
+  //if(p_rsum) delete [] p_rsum;
+  //if(p_rsta) delete [] p_rsta;
+  //if(p_ssta) delete [] p_ssta;
 }
 
 //--------------------------
@@ -309,6 +309,30 @@ ImageProc::fillRadialHistogram()
 void 
 ImageProc::getIntensityLimits(float& imin, float& imax)
 {
+  double a(0);
+  double s0(0);    
+  double s1(0);    
+  double s2(0);    
+
+  for(int iy=m_zymin; iy<m_zymax; ++iy) {
+    for(int ix=m_zxmin; ix<m_zxmax; ++ix) {
+      a = (float)m_nda_image[iy][ix];
+      s0 += 1;
+      s1 += a;
+      s2 += a*a;
+    }
+  }
+  double ave = (s0>0) ? s1/s0 : 0;
+  double rms = (s0>0) ? sqrt(s2/s0-ave*ave) : 1;
+
+  imin = floor(ave-3*rms);
+  imax =  ceil(ave+6*rms);
+}
+
+//--------------------------
+void 
+ImageProc::getIntensityLimitsV1(float& imin, float& imax)
+{
     float a(0);
     imin = (float)m_nda_image[m_zymin][m_zxmin];
     imax = imin;
@@ -356,10 +380,11 @@ ImageProc::fillSpectralHistogram(const float& amin, const float& amax, const uns
   }
   else {
     float Imin, Imax;
-    //getIntensityLimits(Imin,Imax);
-    getMinMax<GeoImage::raw_image_t>(m_nda_image, Imin, Imax);
+    getIntensityLimits(Imin,Imax);
+    //getMinMax<GeoImage::raw_image_t>(m_nda_image, Imin, Imax);
     m_amax = (amax==0) ? Imax : amax;
-    m_amin = Imin;
+    m_amin = (amin==0) ? Imin : amin;
+    //m_amin = Imin;
   }
 
   std::stringstream ss2; ss2 << "Evaluate histogram for range: " << m_amin << ", "  << m_amax;

@@ -16,6 +16,7 @@
 #include "PSQt/WdgImageFigs.h"
 #include "PSQt/WdgFile.h"
 #include "PSQt/WdgPointPos.h"
+#include "PSQt/WdgPointPos3D.h"
 #include "PSQt/WdgColorTable.h"
 #include "PSQt/ImageProc.h"
 #include "PSQt/WdgRadHist.h"
@@ -63,13 +64,17 @@ class GUIImageViewer : public Frame
     inline ImageProc* getImageProc() { return m_imageproc; }
     void showChildWindows();
 
+    QPushButton*   m_but_reset; // public, because it emits signal which needs to be connected with other slots
+
  public slots:
     void onButExit(); // is not used
     void onButSpec();
     void onButRHis();
     void onButAdd();
+    void onButReset();
     void onButColorTab();
     void onImageIsUpdated(ndarray<GeoImage::raw_image_t,2>&);
+    void onCheckBox(int);
 
  private:
     //QLabel*      m_lab_fname;
@@ -78,13 +83,16 @@ class GUIImageViewer : public Frame
     QPushButton*   m_but_rhis;
     QPushButton*   m_but_add;
     QPushButton*   m_but_cols;
+    QCheckBox*     m_cbx_more;
     QHBoxLayout*   m_hbox;
+    QHBoxLayout*   m_hbex;
     QVBoxLayout*   m_vbox;
 
     //WdgImage*      m_image;
     WdgImageFigs*    m_image;
     WdgFile*         m_file;
     WdgPointPos*     m_pointpos;
+    WdgPointPos3D*   m_curspos;
     WdgColorTable*   m_colortab;
     ImageProc*       m_imageproc;
     WdgRadHist*      m_radhist;

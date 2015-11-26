@@ -63,6 +63,7 @@ class ImageProc : public QObject
     void fillRadialHistogram();
     void fillSpectralHistogram(const float& amin=0, const float& amax=0, const unsigned& nbins=100);
     void getIntensityLimits(float& amin, float& amax);
+    void getIntensityLimitsV1(float& amin, float& amax);
 
     float m_rbin_width;
     bool m_image_is_set;

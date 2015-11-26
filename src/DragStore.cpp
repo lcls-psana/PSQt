@@ -33,7 +33,10 @@ DragStore::DragStore(WdgImage* wimg)
 
   QPen pen_boarder(Qt::white, 1, Qt::DashLine); // Qt::SolidLine
   this -> addCircle(100, &pen_boarder);
+  this -> addCircle(200, &pen_boarder);
   this -> addCircle(300, &pen_boarder);
+  this -> addCircle(400, &pen_boarder);
+  this -> addCircle(500, &pen_boarder);
 }
 
 //--------------------------

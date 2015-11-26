@@ -84,15 +84,17 @@ class WdgImage : public QLabel
 
 
  public slots:
-    void onImageIsUpdated(ndarray<GeoImage::raw_image_t,2>&) ;
-    void onFileNameChanged(const std::string& fname) ;
-    void onTest() ;
+    void onImageIsUpdated(ndarray<GeoImage::raw_image_t,2>&);
+    void onFileNameChanged(const std::string& fname);
+    void onTest();
+    void onZoomResetButton();
     void onPressOnAxes(QMouseEvent* e, QPointF p);
     void onHueAnglesUpdated(const float&, const float&);
     void testSignalZoomIsChanged(int&, int&, int&, int&, float&, float&);
 
  signals :
     void zoomIsChanged(int&, int&, int&, int&, float&, float&);
+    void mouseInPoint(const float&, const float&, const float&);
 					 
  protected:
 
@@ -156,6 +158,7 @@ class WdgImage : public QLabel
     void setIntensityRange(const float& amin, const float& amax);
     void setNormImage(const ndarray<GeoImage::image_t,2>&) ;
     void getIntensityLimits(float& imin, float& imax);
+    void getIntensityLimitsV1(float& imin, float& imax);
 };
 
 } // namespace PSQt

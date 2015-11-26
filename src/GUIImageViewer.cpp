@@ -38,11 +38,15 @@ GUIImageViewer::GUIImageViewer( QWidget *parent )
 
   m_file      = new PSQt::WdgFile(this, "Image:", adp_fname_def.path());
   m_pointpos  = new PSQt::WdgPointPos(this, "Center x:", " y:", 0, 0, false, 60, 2);
+  m_curspos   = new PSQt::WdgPointPos3D(this, "col:", "row:", "A:", 0, 0, 0, false, 50, 0, 0, 2);
   m_colortab  = new WdgColorTable();
   m_but_add   = new QPushButton("Add circle", this);
+  m_but_reset = new QPushButton("Reset", this);
   m_but_cols  = new QPushButton("Colors", this);
   m_but_spec  = new QPushButton("Spectrum", this);
   m_but_rhis  = new QPushButton("r-Histo", this);
+  m_cbx_more  = new QCheckBox("&More");
+
   m_image     = new PSQt::WdgImageFigs(this, m_file->fileName());
   m_imageproc = new ImageProc();
   m_radhist   = new PSQt::WdgRadHist();
@@ -52,14 +56,21 @@ GUIImageViewer::GUIImageViewer( QWidget *parent )
   m_hbox = new QHBoxLayout();
   m_hbox -> addWidget(m_pointpos);
   m_hbox -> addWidget(m_but_add);
+  m_hbox -> addWidget(m_but_reset);
   m_hbox -> addStretch(1);
-  m_hbox -> addWidget(m_but_cols);
-  m_hbox -> addWidget(m_but_spec);
-  m_hbox -> addWidget(m_but_rhis);
+  m_hbox -> addWidget(m_cbx_more);
+
+  m_hbex = new QHBoxLayout();
+  m_hbex -> addWidget(m_curspos);
+  m_hbex -> addStretch(1);
+  m_hbex -> addWidget(m_but_cols);
+  m_hbex -> addWidget(m_but_spec);
+  m_hbex -> addWidget(m_but_rhis);
 
   m_vbox = new QVBoxLayout();
   m_vbox -> addWidget(m_file);
   m_vbox -> addWidget(m_image);
+  m_vbox -> addLayout(m_hbex);
   m_vbox -> addLayout(m_hbox);
 
   this -> setLayout(m_vbox);
@@ -70,6 +81,7 @@ GUIImageViewer::GUIImageViewer( QWidget *parent )
   setTips();
   
   connect(m_but_add,  SIGNAL(clicked()), this, SLOT(onButAdd()));
+  connect(m_but_reset,SIGNAL(clicked()), this, SLOT(onButReset()));
   connect(m_but_cols, SIGNAL(clicked()), this, SLOT(onButColorTab()));
   connect(m_but_spec, SIGNAL(clicked()), this, SLOT(onButSpec()));
   connect(m_but_rhis, SIGNAL(clicked()), this, SLOT(onButRHis()));
@@ -80,8 +92,15 @@ GUIImageViewer::GUIImageViewer( QWidget *parent )
   connect(m_pointpos, SIGNAL(posIsChanged(const QPointF&)), m_image, SLOT(forceUpdate())); 
   connect(p_drag_center, SIGNAL(centerIsChanged(const QPointF&)), m_imageproc, SLOT(onCenterIsChanged(const QPointF&))); 
 
+  connect(m_but_reset,SIGNAL(clicked()), m_image, SLOT(onZoomResetButton()));
+
+  connect(m_cbx_more, SIGNAL(stateChanged(int)), this, SLOT(onCheckBox(int)));
+
   connect(m_image, SIGNAL(zoomIsChanged(int&, int&, int&, int&, float&, float&)), 
           m_imageproc, SLOT(onZoomIsChanged(int&, int&, int&, int&, float&, float&)));
+
+  connect(m_image, SIGNAL(mouseInPoint(const float&, const float&, const float&)), 
+          m_curspos, SLOT(setPointPos(const float&, const float&, const float&)));
 
   connect(m_colortab, SIGNAL(hueAnglesUpdated(const float&, const float&)), 
           m_image, SLOT(onHueAnglesUpdated(const float&, const float&)));
@@ -109,6 +128,9 @@ GUIImageViewer::GUIImageViewer( QWidget *parent )
 
   // open spectral and radial histogram windows
   //MsgInLog(_name_(), INFO, "c-tor is done");
+
+  //m_cbx_more -> setChecked(false); // from QAbstractButton
+  onCheckBox(0);
 }
 
 //--------------------------
@@ -119,9 +141,11 @@ GUIImageViewer::setTips()
   m_but_add  -> setToolTip("Add circle for current center and random radius.\n"\
                            "Then move circle clicking on it by left mouse button and drag,\n"\
                            "or remove circle clicking on it by middle mouse button.");
+  m_but_reset-> setToolTip("Reset zoom and intensity range.");
   m_but_cols -> setToolTip("Open/close color setting tool");
   m_but_spec -> setToolTip("Open/close spectral window");
   m_but_rhis -> setToolTip("Open/close radial projection (angul-integrated)");
+  m_cbx_more -> setToolTip("Show more or less control buttons");
 }
 //--------------------------
 
@@ -129,9 +153,11 @@ void
 GUIImageViewer::setStyle()
 {
   m_but_add  -> setCursor(Qt::PointingHandCursor); 
+  m_but_reset-> setCursor(Qt::PointingHandCursor); 
   m_but_cols -> setCursor(Qt::PointingHandCursor); 
   m_but_spec -> setCursor(Qt::PointingHandCursor); 
   m_but_rhis -> setCursor(Qt::PointingHandCursor); 
+  m_cbx_more -> setCursor(Qt::PointingHandCursor);
 }
  
 //--------------------------
@@ -243,6 +269,14 @@ GUIImageViewer::onButAdd()
 //--------------------------
 
 void 
+GUIImageViewer::onButReset()
+{
+  MsgInLog(_name_(), DEBUG, "onButReset, SIGNAL(clicked()) is emitted by the button");
+}
+
+//--------------------------
+
+void 
 GUIImageViewer::onButColorTab()
 {
   static unsigned counter=0; 
@@ -263,6 +297,20 @@ GUIImageViewer::onImageIsUpdated(ndarray<GeoImage::raw_image_t,2>& nda)
 
   this -> wdgImage() -> onImageIsUpdated(nda);
   m_imageproc -> onImageIsUpdated(nda);
+}
+//--------------------------
+
+void 
+GUIImageViewer::onCheckBox(int state)
+{
+  MsgInLog(_name_(), DEBUG, "onCheckBox()");
+
+  bool is_visible = m_cbx_more -> isChecked();
+  m_cbx_more -> setText((is_visible)? "&Less" : "&More");
+  m_curspos ->setVisible(is_visible);
+  m_but_cols->setVisible(is_visible);
+  m_but_spec->setVisible(is_visible);
+  m_but_rhis->setVisible(is_visible);
 }
 
 //--------------------------

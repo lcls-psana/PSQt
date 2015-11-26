@@ -50,15 +50,15 @@ int main( int argc, char **argv )
       {
         case 'g':
           gvalue = optarg;
-          printf ("-g: gvalue = %s\n",gvalue);
+          printf ("-g: gvalue = %s, file name for geometry\n",gvalue);
           break;
         case 'i':
           ivalue = optarg;
-          printf ("-i: ivalue = %s\n",ivalue);
+          printf ("-i: ivalue = %s, file name for image n-d array\n",ivalue);
           break;
         case 'L':
           Lvalue = optarg;
-          printf ("-L: Lvalue = %s\n",Lvalue);
+          printf ("-L: Lvalue = %s, possible values: DEBUG, INFO, WARNING, CRITICAL, ERROR, NONE\n",Lvalue);
           break;
         case 'h':
           //printf ("-h: ");

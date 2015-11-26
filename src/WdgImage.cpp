@@ -16,7 +16,7 @@
 #include <iostream>    // for std::cout
 #include <fstream>     // for std::ifstream(fname)
 //using namespace std; // for cout without std::
-//#include <math.h>  // atan2
+#include <math.h>  // atan2, round, floor, ceil, trunc
 #include <cstring> // for memcpy
 
 namespace PSQt {
@@ -38,6 +38,8 @@ WdgImage::WdgImage(QWidget *parent, const std::string& ifname)
   , m_rect2(0)
   , p_nda_img_raw(0)
 {
+  MsgInLog(_name_(), DEBUG, "ctor1 - using fname");
+
   setWdgParams();
 
   const std::string fname = (ifname!=std::string()) ? ifname
@@ -48,7 +50,7 @@ WdgImage::WdgImage(QWidget *parent, const std::string& ifname)
 
 //--------------------------
 
-WdgImage::WdgImage( QWidget *parent, const QImage* image)
+WdgImage::WdgImage(QWidget *parent, const QImage* image)
   : QLabel(parent)
   , m_pixmap_raw(0)
   , m_pixmap_scl(0)
@@ -63,6 +65,8 @@ WdgImage::WdgImage( QWidget *parent, const QImage* image)
   , m_rect2(0) 
   , p_nda_img_raw(0)
 {
+  MsgInLog(_name_(), DEBUG, "ctor2 - using QImage*");
+
   setWdgParams();
   setPixmapScailedImage(image);
 }
@@ -90,17 +94,13 @@ WdgImage::setWdgParams()
 {
   this -> setMinimumSize(606,606);
   this -> setAlignment(Qt::AlignTop | Qt::AlignLeft);
-
   this -> setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-
+  this -> setCursor(Qt::PointingHandCursor); // Qt::SizeAllCursor, Qt::WaitCursor, Qt::PointingHandCursor
+  this -> setMargin(0);
   //////////////////////////////////
   //this -> setScaledContents (false);
   this -> setScaledContents (true);
   //////////////////////////////////
-
-  this -> setCursor(Qt::PointingHandCursor); // Qt::SizeAllCursor, Qt::WaitCursor, Qt::PointingHandCursor
-
-  this -> setMargin(0);
 
   QVector<qreal> dashes;
   qreal space = 4;
@@ -140,11 +140,9 @@ WdgImage::paintEvent(QPaintEvent *event)
   QLabel::paintEvent(event);
 
   m_painter->begin(this);
-
   //-----------
   if(m_is_pushed) drawRect();
   //-----------
-
   m_painter->end();
 
   //std::cout << "WdgImage::paintEvent counter = " << count << '\n';
@@ -157,6 +155,7 @@ WdgImage::drawRect()
 {
   m_rect1->setCoords(m_point1->x(), m_point1->y(), m_point2->x(), m_point2->y());
   m_rect2->setCoords(m_point1->x(), m_point1->y(), m_point2->x(), m_point2->y());
+
   m_painter->setPen  (*m_pen1);
   m_painter->drawRect(*m_rect1); 
   m_painter->setPen  (*m_pen2);
@@ -187,7 +186,7 @@ WdgImage::zoomInImage()
   //std::cout << "  x1:" << m_point1->x() << "  y1:" << m_point1->y() 
   //          << "  x2:" << m_point2->x() << "  y2:" << m_point2->y()<< '\n'; 
 
-  if(m_point1->x() != 0 and m_point1->y() != 0) {
+  if(m_point1->x() != 0 or m_point1->y() != 0) {
 
     float sclx = float(m_pixmap_scl->size().width())  / this->size().width();  
     float scly = float(m_pixmap_scl->size().height()) / this->size().height();  
@@ -214,6 +213,12 @@ WdgImage::zoomInImage()
   }
 
   if (m_zoom_is_on) {
+    int rw = int(m_pixmap_raw->size().width());
+    int rh = int(m_pixmap_raw->size().height());
+
+    if(m_xmax_raw > m_xmin_raw+rw) m_xmax_raw = m_xmin_raw+rw;
+    if(m_ymax_raw > m_ymin_raw+rh) m_ymax_raw = m_ymin_raw+rh;
+
      *m_pixmap_scl = m_pixmap_raw->copy(m_xmin_raw, m_ymin_raw, m_xmax_raw-m_xmin_raw, m_ymax_raw-m_ymin_raw);
      setPixmap(m_pixmap_scl->scaled(this->size(), Qt::KeepAspectRatio, Qt::FastTransformation));
 
@@ -226,11 +231,11 @@ WdgImage::zoomInImage()
 QPointF
 WdgImage::pointInRaw(const QPointF& point_img)
 {
-  float sclx = float(m_pixmap_scl->size().width())  / this->size().width();  
-  float scly = float(m_pixmap_scl->size().height()) / this->size().height();  
+  float sclx = float(m_pixmap_scl->size().width())  / this->size().width();
+  float scly = float(m_pixmap_scl->size().height()) / this->size().height();
 
-  float x = point_img.x()*sclx + m_xmin_raw;
-  float y = point_img.y()*scly + m_ymin_raw;  
+  double x = point_img.x()*sclx + m_xmin_raw;
+  double y = point_img.y()*scly + m_ymin_raw;  
 
   return QPointF(x,y);
 }
@@ -240,8 +245,10 @@ WdgImage::pointInRaw(const QPointF& point_img)
 QPointF
 WdgImage::pointInImage(const QPointF& point_raw)
 {
-  float sclx = WdgImage::size().width()  / float((m_zoom_is_on)? (m_xmax_raw-m_xmin_raw) : m_pixmap_scl->size().width());  
-  float scly = WdgImage::size().height() / float((m_zoom_is_on)? (m_ymax_raw-m_ymin_raw) : m_pixmap_scl->size().height());  
+  //float sclx = WdgImage::size().width()  / float((m_zoom_is_on)? (m_xmax_raw-m_xmin_raw) : m_pixmap_scl->size().width());  
+  //float scly = WdgImage::size().height() / float((m_zoom_is_on)? (m_ymax_raw-m_ymin_raw) : m_pixmap_scl->size().height());  
+  float sclx = this->size().width()  / float((m_zoom_is_on)? (m_xmax_raw-m_xmin_raw) : m_pixmap_scl->size().width());  
+  float scly = this->size().height() / float((m_zoom_is_on)? (m_ymax_raw-m_ymin_raw) : m_pixmap_scl->size().height());  
 
   float x = (point_raw.x()-m_xmin_raw)*sclx;
   float y = (point_raw.y()-m_ymin_raw)*scly;  
@@ -252,17 +259,31 @@ WdgImage::pointInImage(const QPointF& point_raw)
 //--------------------------
 
 void 
-WdgImage::setPixmapScailedImage(const QImage* image)
+WdgImage::setPixmapScailedImage(const QImage* image) // = 0 by default
 {  
   //if image is available - reset m_pixmap_raw
   if(image) {
+
+    //QRect r = image->rect();
+    //cout << "XXX:setPixmapScailedImage(*image), rect: " << " x=" << r.x() << " y=" << r.y()
+    //     << " width=" << r.width() << " height=" << r.height() << '\n';
+
     if(m_pixmap_raw) delete m_pixmap_raw;
     m_pixmap_raw = new QPixmap(QPixmap::fromImage(*image));
   }
 
-  if (m_zoom_is_on) 
-    zoomInImage();
+  if (m_zoom_is_on) {
+    //zoomInImage();
 
+    QSize size_new = image->size();
+    if(size_new.width()  != m_xmax_raw
+    || size_new.height() != m_ymax_raw) {
+        m_xmax_raw = size_new.width();
+        m_ymax_raw = size_new.height();
+    }
+    zoomInImage(); //emit zoomIsChanged inside
+    update();
+  }
   else {
     if (m_pixmap_scl) delete m_pixmap_scl;
     m_pixmap_scl = new QPixmap(*m_pixmap_raw);
@@ -272,6 +293,7 @@ WdgImage::setPixmapScailedImage(const QImage* image)
     m_xmax_raw = m_pixmap_raw->size().width();
     m_ymax_raw = m_pixmap_raw->size().height();
 
+    //if(m_amin==0 && m_amax==0) setIntensityRange(m_amin,m_amax);
     emit zoomIsChanged(m_xmin_raw, m_ymin_raw, m_xmax_raw, m_ymax_raw, m_amin, m_amax);
   }
 }
@@ -321,13 +343,23 @@ WdgImage::closeEvent(QCloseEvent *event)
 void 
 WdgImage::mousePressEvent(QMouseEvent *e)
 {
-  /*
-  std::cout << "mousePressEvent:"
-            << "  button: " << e->button()
-            << "  x(),y() = " << e->x() << ", " << e->y()
-            << "  isActiveWindow(): " << this->isActiveWindow()
-            << '\n';
-  */
+  QPointF p = pointInRaw(QPointF(e->x(),e->y()));
+  const ndarray<GeoImage::raw_image_t,2>& nda = *p_nda_img_raw;
+
+  float ix = (float)floor(p.x());
+  float iy = (float)floor(p.y());
+  float  z = (float)nda[iy][ix];
+
+  //std::cout << "mousePressEvent:"
+  //          << "  button: " << e->button()
+  //          << "  x(),y() = " << e->x() << ", " << e->y()
+  //          << "  xr,yr = " <<p.x()  << ", " << p.y()
+  //          << "  ix,iy,z = " << ix << ", " << iy << ", " << z
+  //          << "  isActiveWindow(): " << this->isActiveWindow()
+  //          << '\n';
+
+  emit mouseInPoint(ix, iy, z);  
+
   this -> setCursor(Qt::ClosedHandCursor);
 
   m_point1->setX(e->x());
@@ -337,6 +369,21 @@ WdgImage::mousePressEvent(QMouseEvent *e)
 
   m_is_pushed = true;
   update();
+}
+
+//--------------------------
+
+void 
+WdgImage::onZoomResetButton()
+{
+    MsgInLog(_name_(), INFO, "onZoomResetButton()");
+
+    this->resetZoom();
+    float amin = 0;
+    float amax = 0;
+    this->setIntensityRange(amin, amax);
+    //setPixmapScailedImage();
+    //update();
 }
 
 //--------------------------
@@ -356,22 +403,38 @@ WdgImage::mouseReleaseEvent(QMouseEvent *e)
 
   m_is_pushed = false;
 
-  if(e->button() == 4) { // for middle button
-
+  if(e->button() == Qt::MidButton) { // where Qt::MidButton=4
+    // Do it for reset
     this->resetZoom();
     setPixmapScailedImage();
     update();
     return;
   }
 
-  m_point2->setX(e->x());
-  m_point2->setY(e->y());
-
-  QPoint dist = *m_point2 - *m_point1;
-
-  if(this->rect().contains(*m_point2) && abs(dist.x()) > 5 && abs(dist.y()) > 5) {
-    zoomInImage();
-    update();
+  if(e->button() == Qt::LeftButton) { // where Qt::LeftButton=1
+    // Do it for zoom
+    m_point2->setX(e->x());
+    m_point2->setY(e->y());
+    
+    QPoint dist = *m_point2 - *m_point1;
+    
+    if(abs(dist.x()) > 5 && abs(dist.y()) > 5) {
+    
+      if(! this->rect().contains(*m_point2)) {
+        int x = int(this->rect().x()); 
+        int y = int(this->rect().y()); 
+        int w = int(this->rect().width()); 
+        int h = int(this->rect().height()); 
+    
+        if(e->x() < x  ) m_point2->setX(x);
+        if(e->y() < y  ) m_point2->setY(y);
+        if(e->x() > x+w) m_point2->setX(x+w);
+        if(e->y() > y+h) m_point2->setY(y+h);
+      }
+    
+      zoomInImage();
+      update();
+    }
   }
 }
 
@@ -380,9 +443,11 @@ WdgImage::mouseReleaseEvent(QMouseEvent *e)
 void 
 WdgImage::mouseMoveEvent(QMouseEvent *e)
 {
-  //std::cout << "mouseMoveEvent: "
+  //std::cout << "XXX: mouseMoveEvent: "
+  //          << "  button: " << e->button()
   //          << "  x(),y() = "  << e->x() << ", " << e->y()
   //          << '\n';
+
   m_point2->setX(e->x());
   m_point2->setY(e->y());
   update();
@@ -401,6 +466,11 @@ WdgImage::loadImageFromFile(const std::string& fname)
 
   this->resetZoom();
   setPixmapScailedImage(&image);
+
+  //onZoomResetButton();    
+  //float amin = 0;
+  //float amax = 0;
+  //setIntensityRange(amin, amax);
 }
 
 //--------------------------
@@ -457,6 +527,39 @@ WdgImage::setNormImage(const ndarray<GeoImage::image_t,2>& nda)
 void 
 WdgImage::getIntensityLimits(float& imin, float& imax)
 {
+  imin=0; 
+  imax=1; 
+  if (! p_nda_img_raw) return;
+
+  double a(0);
+  double s0(0);    
+  double s1(0);    
+  double s2(0);    
+
+  const ndarray<GeoImage::raw_image_t,2>& nda = *p_nda_img_raw;
+  for(int iy=m_ymin_raw; iy<m_ymax_raw; ++iy) {
+    for(int ix=m_xmin_raw; ix<m_xmax_raw; ++ix) {
+      a = (float)nda[iy][ix];
+  	s0 += 1;
+  	s1 += a;
+  	s2 += a*a;
+    }
+  }
+  double ave = (s0>0) ? s1/s0 : 0;
+  double rms = (s0>0) ? sqrt(s2/s0-ave*ave) : 1;
+
+  imin = floor(ave-3*rms);
+  imax =  ceil(ave+6*rms);
+  //std::cout << "XXX: getIntensityLimits: "
+  //          << "  ave,rms = "  << ave << ", " << rms
+  //          << "  imin,imax = "  << imin << ", " << imax
+  //          << '\n';
+}
+
+//--------------------------
+void 
+WdgImage::getIntensityLimitsV1(float& imin, float& imax)
+{
     float a(0);
     const ndarray<GeoImage::raw_image_t,2>& nda = *p_nda_img_raw;
     imin = (float)nda[m_ymin_raw][m_xmin_raw];
@@ -474,24 +577,20 @@ WdgImage::getIntensityLimits(float& imin, float& imax)
 void 
 WdgImage::setIntensityRange(const float& amin, const float& amax)
 {
-  //m_amin = amin;
-  //m_amax = amax;
-
   if(amin && amax) {
     m_amin = amin;
     m_amax = amax;
   }
   else {
     float Imin, Imax;
-    //getMinMax<GeoImage::raw_image_t>(*p_nda_img_raw, Imin, Imax);
     this->getIntensityLimits(Imin, Imax);
+
     m_amax = (amax==0) ? Imax : amax;
-    m_amin = Imin;
+    m_amin = (amin==0) ? Imin : amin;
   }
 
   if(p_nda_img_raw) this->onImageIsUpdated(*p_nda_img_raw);
 
-  //update();
   std::stringstream ss; ss << "Set intensity range amin=" << m_amin << " amax=" << m_amax;
   MsgInLog(_name_(), INFO, ss.str());  
 }

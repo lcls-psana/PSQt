@@ -11,6 +11,10 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V00-00-18
+2015-11-25 Mikhail S. Dubrovin
+- solve problem with zoom and bunch of other minor problems, add module WdgPointPos3D (PSAS-34)
+	
 Tag: V00-00-17
 2015-09-09 Mikhail S. Dubrovin
 - WdgFile::onButFile - fix bug in parsing input file name (PSAS-34)

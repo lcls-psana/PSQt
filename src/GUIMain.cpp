@@ -127,6 +127,7 @@ GUIMain::GUIMain( QWidget *parent
   // Complete initialization through connected signals & slots
   m_wgt -> get_geotree() -> setItemSelected();
   m_geoimg -> setFirstImage();
+  m_guiimv->wdgImage()->onZoomResetButton();
 }
 
 //--------------------------
