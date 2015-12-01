@@ -71,7 +71,7 @@ public:
 
   const QPainterPath& pathForRuler(){ return m_path; }
   void printTransform();
-
+  int precision();
 
 private:
 

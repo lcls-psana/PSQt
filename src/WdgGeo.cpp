@@ -337,6 +337,19 @@ WdgGeo::setGeoPars()
 void
 WdgGeo::updateGeoPars()
 {
+  MsgInLog(_name_(), DEBUG, "updateGeoPars() for " + m_geo->get_geo_name());   
+
+  if(m_geo->get_parent_name().empty()) {
+    MsgInLog(_name_(), WARNING, "This is a top hierarchical geometry object."
+	     + std::string(" TOP COORDINATE FRAME PARAMETERS ARE NOT EDITABLE!"));
+    m_but_add->setEnabled(false);
+    m_but_sub->setEnabled(false);
+  }
+  else {
+    m_but_add->setEnabled(true);
+    m_but_sub->setEnabled(true);
+  }
+
   double x, y, z, rot_z, rot_y, rot_x, tilt_z, tilt_y, tilt_x;     
   m_geo->get_geo_pars(x, y, z, rot_z, rot_y, rot_x, tilt_z, tilt_y, tilt_x);
 

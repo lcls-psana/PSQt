@@ -2,7 +2,8 @@
 // This application launches the work threads and main GUI 
 //
 #include <getopt.h>
-#include <stdio.h>
+#include <stdio.h>      // printf, fgets
+#include <stdlib.h>     // atoi
 #include <iostream>
 
 #include <QApplication>
@@ -27,7 +28,14 @@
 //===================
 
 void usage(char* name) {
-  std::cout << "Usage: " << name << " [-g <geo-fname>] [-i <image-array-fname>] [-L <logger-level>] [-h] [<test-number>] \n";
+  std::cout << "Usage: " << name << " [-g <geo-fname>] [-i <image-array-fname>] [-L <logger-level>] [-h] [<test-number>]"
+            << "\n      -g <geo-fname>         - (string)   geometry file name"
+            << "\n      -i <image-array-fname> - (string)   image n-d array text file name"
+            << "\n      -x <x-center-offset>   - (unsigned) image center x-coordinate offset in pixels"
+            << "\n      -y <y-center-offset>   - (unsigned) image center y-coordinate offset in pixels"
+            << "\n      -L <logger-level>      - (string)   verbosity level can be DEBUG, INFO, WARNING, CRITICAL, ERROR"
+            << "\n      -h - this help message"
+            << '\n';
 }
 
 //===================
@@ -40,25 +48,35 @@ int main( int argc, char **argv )
   // ------------------
   char *ivalue = NULL;
   char *gvalue = NULL;
+  char *xvalue = NULL;
+  char *yvalue = NULL;
   char *Lvalue = NULL;
   int c;
   extern char *optarg;
   extern int optind, optopt; //, opterr;
 
-  while ((c = getopt(argc, argv, ":g:i:L:h")) != -1)
+  while ((c = getopt(argc, argv, ":g:i:x:y:L:h")) != -1)
       switch (c)
       {
         case 'g':
           gvalue = optarg;
-          printf ("-g: gvalue = %s, file name for geometry\n",gvalue);
+          printf ("-g: gvalue = %s, (string) file name for geometry\n",gvalue);
           break;
         case 'i':
           ivalue = optarg;
-          printf ("-i: ivalue = %s, file name for image n-d array\n",ivalue);
+          printf ("-i: ivalue = %s, (string) file name for image n-d array\n",ivalue);
+          break;
+        case 'x':
+          xvalue = optarg;
+          printf ("-x: xvalue = %s, (unsigned) image center x-coordinate offset in pixels\n",xvalue);
+          break;
+        case 'y':
+          yvalue = optarg;
+          printf ("-y: yvalue = %s, (unsigned) image center y-coordinate offset in pixels\n",yvalue);
           break;
         case 'L':
           Lvalue = optarg;
-          printf ("-L: Lvalue = %s, possible values: DEBUG, INFO, WARNING, CRITICAL, ERROR, NONE\n",Lvalue);
+          printf ("-L: Lvalue = %s, (string) possible values: DEBUG, INFO, WARNING, CRITICAL, ERROR, NONE\n",Lvalue);
           break;
         case 'h':
           //printf ("-h: ");
@@ -89,12 +107,16 @@ int main( int argc, char **argv )
 
   std::string gfname = (gvalue) ? gvalue : std::string();
   std::string ifname = (ivalue) ? ivalue : std::string();
+  unsigned    xcent  = (xvalue) ? unsigned(atoi(xvalue)) : 2000;
+  unsigned    ycent  = (yvalue) ? unsigned(atoi(yvalue)) : 2000;
   PSQt::LEVEL level  = (Lvalue) ? PSQt::levelFromString(std::string(Lvalue)) : PSQt::INFO;
 
   cout << "\nStart app with input parameters\n" << std::setw(31) << setfill('=') << '='
-       << "\n  geometry     : " << gfname
-       << "\n  image array  : " << ifname
-       << "\n  logger level : " << PSQt::strLevel(level)
+       << "\n  geometry              : " << gfname
+       << "\n  image array           : " << ifname
+       << "\n  image center offset x : " << xcent
+       << "\n  image center offset y : " << ycent
+       << "\n  logger level          : " << PSQt::strLevel(level)
        << '\n';
 
   // ------------------
@@ -123,7 +145,7 @@ int main( int argc, char **argv )
     else {cout << "Input argument \"" << argv[1] << "\" is not recognized...\n"; return 0;}
   }
   else {
-    PSQt::GUIMain* w = new PSQt::GUIMain(0, level, gfname, ifname);  w->show(); 
+    PSQt::GUIMain* w = new PSQt::GUIMain(0, level, gfname, ifname, xcent, ycent);  w->show(); 
   }
 
   return app.exec(); // Begin to display qt4 GUI

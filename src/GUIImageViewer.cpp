@@ -28,7 +28,7 @@ namespace PSQt {
 
 //--------------------------
 
-GUIImageViewer::GUIImageViewer( QWidget *parent )
+GUIImageViewer::GUIImageViewer(QWidget *parent, const int& xcent, const int& ycent)
     : Frame(parent)
     , m_colortab(0)
 {
@@ -120,8 +120,12 @@ GUIImageViewer::GUIImageViewer( QWidget *parent )
   //connect(m_spechist->axes(), SIGNAL(pressOnAxes(QMouseEvent*, QPointF)),
   //        m_imageproc, SLOT(onPressOnAxes(QMouseEvent*, QPointF)));
 
+  //QPoint poic(xcent,ycent);
+  ((DragCenter*)p_drag_center) -> moveToRaw(QPoint(xcent,ycent));
+
   // const QPointF center(m_image->getDragStore()->getCenter());
   m_pointpos->setPointPos(m_image->getDragStore()->getCenter());
+
 
   // In order to complete initialization by natural signals
   ((DragCenter*)p_drag_center) -> forceToEmitSignal();

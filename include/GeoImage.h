@@ -43,10 +43,14 @@ class GeoImage : public QObject
     typedef pdscalibdata::NDArrIOV1<double,1> NDAIO;
 
     GeoImage(PSCalib::GeometryAccess*,
-             const std::string& fname_img = std::string()); 
+             const std::string& fname_img = std::string(), 
+             const int& xcent = 2000, 
+             const int& ycent = 2000); 
 
     GeoImage(const std::string& fname_geo = std::string(), 
-             const std::string& fname_img = std::string()); 
+             const std::string& fname_img = std::string(), 
+             const int& xcent = 2000, 
+             const int& ycent = 2000); 
 
     void setFirstImage();
 
@@ -68,6 +72,9 @@ class GeoImage : public QObject
  private:
     std::string m_fname_geo;
     std::string m_fname_img;
+    int         m_xcent;
+    int         m_ycent;
+
     PSCalib::GeometryAccess* m_geometry;
     ndarray<const double, 1> m_anda;
 

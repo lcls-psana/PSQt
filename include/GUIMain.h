@@ -56,7 +56,10 @@ class GUIMain : public Frame
     GUIMain( QWidget *parent=0 
            , const LEVEL& level=DEBUG
 	   , const std::string& fgeo=std::string()
-	   , const std::string& fnda=std::string());
+	   , const std::string& fnda=std::string()
+	   , const unsigned& xcent=2000
+	   , const unsigned& ycent=2000
+    );
 
     void resizeEvent     (QResizeEvent *event = 0) ;
     void closeEvent      (QCloseEvent  *event = 0) ;

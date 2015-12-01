@@ -22,10 +22,12 @@ namespace PSQt {
 
 //--------------------------
 
-GeoImage::GeoImage(PSCalib::GeometryAccess* geometry, const std::string& fname_img)
+  GeoImage::GeoImage(PSCalib::GeometryAccess* geometry, const std::string& fname_img, const int& xcent, const int& ycent)
   : QObject(NULL)
   , m_fname_geo(std::string())
   , m_fname_img(fname_img)
+  , m_xcent(xcent)
+  , m_ycent(ycent)
   , m_geometry(geometry)
   , m_ndaio(0)
 {
@@ -36,10 +38,12 @@ GeoImage::GeoImage(PSCalib::GeometryAccess* geometry, const std::string& fname_i
 
 //--------------------------
 
-GeoImage::GeoImage(const std::string& fname_geo, const std::string& fname_img) 
+GeoImage::GeoImage(const std::string& fname_geo, const std::string& fname_img, const int& xcent, const int& ycent) 
   : QObject(NULL)
   , m_fname_geo(fname_geo)
   , m_fname_img(fname_img)
+  , m_xcent(xcent)
+  , m_ycent(ycent)
   , m_geometry(0)
   , m_ndaio(0)
 {
@@ -190,8 +194,9 @@ GeoImage::getImage()
   unsigned        isize;
 
   m_geometry->get_top_geo()->evaluate_pixel_coords(true,true);
-  double pix_scale_size =m_geometry->get_pixel_scale_size ();
-  const int xy0_off_pix[2] = {2000,2000};
+  double pix_scale_size =m_geometry->get_pixel_scale_size();
+  //const int xy0_off_pix[2] = {2000,2000};
+  const int xy0_off_pix[2] = {m_xcent,m_ycent};
   //m_geometry->get_pixel_coord_indexes(iX, iY, isize);
   //m_geometry->get_pixel_coord_indexes(iX, iY, isize, ioname, ioindex, pix_scale_size_um, xy0_off_pix);
   m_geometry->get_pixel_coord_indexes(iX, iY, isize, std::string(), 0, pix_scale_size, xy0_off_pix);

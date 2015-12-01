@@ -52,7 +52,7 @@ class GUIImageViewer : public Frame
  Q_OBJECT // macro is needed for connection of signals and slots
 
  public:
-    GUIImageViewer( QWidget *parent = 0 );
+    GUIImageViewer(QWidget *parent=0, const int& xcent=2000, const int& ycent=2000);
 
     void resizeEvent     (QResizeEvent *event = 0) ;
     void closeEvent      (QCloseEvent  *event = 0) ;

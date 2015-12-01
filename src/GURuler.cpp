@@ -9,6 +9,8 @@
 #include "PSQt/GURuler.h"
 #include "PSQt/QGUtils.h"
 
+#include <math.h>       // log10
+
 #include <QFont>
 #include <QGraphicsTextItem>
 
@@ -146,6 +148,19 @@ GURuler::setPars()
   }
 
 //--------------------------
+// for float labels evaluates number of decimal digits after dot
+int
+GURuler::precision()
+  {
+    double v = double(fabs(m_vmax-m_vmin));
+    if(v==0)  return 0;
+    if(v>5)   return 0;
+    if(v>0.5) return 1;
+    double r = log10(v);
+    return int(-floor(r))+1;
+  }
+
+//--------------------------
 
 void 
 GURuler::setPathForRuler()
@@ -184,12 +199,13 @@ GURuler::setPathForRuler()
     if(! m_opt & 1) return;
 
     v_textitems.clear();
+    int prec = precision();
 
     pc=m_p1;
     for(unsigned i=0; i<=m_ndiv1; i++, pc += dp) {
       float val = (m_orient==HD || m_orient==HU) ? pc.x() : pc.y();
 
-      QGraphicsTextItem* txtitem = m_view.scene()->addText(QString(val_to_string<float>(val,0).c_str()), m_font);
+      QGraphicsTextItem* txtitem = m_view.scene()->addText(QString(val_to_string<float>(val,prec).c_str()), m_font);
       QString qstr = txtitem->toPlainText();
       //std::cout << "QString: " << qstr.toStdString() << "  size: " << qstr.size() << '\n';
 

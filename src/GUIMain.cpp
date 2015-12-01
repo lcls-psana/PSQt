@@ -26,6 +26,8 @@ GUIMain::GUIMain( QWidget *parent
                 , const LEVEL& level
 		, const std::string& gfname
 		, const std::string& ifname
+		, const unsigned& xcent
+		, const unsigned& ycent
    ): Frame(parent)
 //  : QWidget(parent)
 {
@@ -48,8 +50,8 @@ GUIMain::GUIMain( QWidget *parent
   m_file_nda  = new PSQt::WdgFile(this, "Set ndarray",  fname_nda, "*.txt *.dat \n *", false);
   m_wgt       = new PSQt::WdgGeoTree(this, fname_geo, pbits);
   m_wge       = new PSQt::WdgGeo(this);
-  m_geoimg    = new PSQt::GeoImage(m_wgt->geoacc(), fname_nda);  
-  m_guiimv    = new PSQt::GUIImageViewer(0);
+  m_geoimg    = new PSQt::GeoImage(m_wgt->geoacc(), fname_nda, xcent, ycent);  
+  m_guiimv    = new PSQt::GUIImageViewer(0, xcent, ycent);
   //m_wimage    = m_guiimv->wdgImage();
  
   m_but_image = new QPushButton("Image", this);

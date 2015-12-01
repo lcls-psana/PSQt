@@ -11,6 +11,14 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V00-00-19
+2015-11-30 Mikhail S. Dubrovin
+- in GURuler add and use precision() method for labels (PSAS-34)
+- extend help in app/geo
+- add input parameters xcent, ycent in app/geo and propagate them to GUIMain, GeoImage, GUIImageViewer, DragCenter
+- separate class GeoTree from WdgGeoTree.h/cpp files
+- WdgGeo - disable +/- buttons for top geo - top coordinate frame parameters should not be edited.
+	
 Tag: V00-00-18
 2015-11-25 Mikhail S. Dubrovin
 - solve problem with zoom and bunch of other minor problems, add module WdgPointPos3D (PSAS-34)
