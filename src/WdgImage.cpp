@@ -276,11 +276,13 @@ WdgImage::setPixmapScailedImage(const QImage* image) // = 0 by default
     //zoomInImage();
 
     QSize size_new = image->size();
-    if(size_new.width()  != m_xmax_raw
-    || size_new.height() != m_ymax_raw) {
+
+    if(size_new.width()  < m_xmax_raw
+    || size_new.height() < m_ymax_raw) {
         m_xmax_raw = size_new.width();
         m_ymax_raw = size_new.height();
     }
+    
     zoomInImage(); //emit zoomIsChanged inside
     update();
   }
@@ -346,9 +348,9 @@ WdgImage::mousePressEvent(QMouseEvent *e)
   QPointF p = pointInRaw(QPointF(e->x(),e->y()));
   const ndarray<GeoImage::raw_image_t,2>& nda = *p_nda_img_raw;
 
-  float ix = (float)floor(p.x());
-  float iy = (float)floor(p.y());
-  float  z = (float)nda[iy][ix];
+  int  ix = (int)floor(p.x());
+  int  iy = (int)floor(p.y());
+  float z = (float)nda[iy][ix];
 
   //std::cout << "mousePressEvent:"
   //          << "  button: " << e->button()
@@ -358,7 +360,7 @@ WdgImage::mousePressEvent(QMouseEvent *e)
   //          << "  isActiveWindow(): " << this->isActiveWindow()
   //          << '\n';
 
-  emit mouseInPoint(ix, iy, z);  
+  emit mouseInPoint((float)ix, (float)iy, z);  
 
   this -> setCursor(Qt::ClosedHandCursor);
 

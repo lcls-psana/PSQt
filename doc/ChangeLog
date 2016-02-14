@@ -11,6 +11,10 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V00-00-20
+2012-02-13 Mikhail S. Dubrovin
+- WdgImage::setPixmapScailedImage - fix issue wiyth image re-zoom at segment motion
+
 Tag: V00-00-19
 2015-11-30 Mikhail S. Dubrovin
 - in GURuler add and use precision() method for labels (PSAS-34)
