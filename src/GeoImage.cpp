@@ -199,7 +199,9 @@ GeoImage::getImage()
   const int xy0_off_pix[2] = {m_xcent,m_ycent};
   //m_geometry->get_pixel_coord_indexes(iX, iY, isize);
   //m_geometry->get_pixel_coord_indexes(iX, iY, isize, ioname, ioindex, pix_scale_size_um, xy0_off_pix);
-  m_geometry->get_pixel_coord_indexes(iX, iY, isize, std::string(), 0, pix_scale_size, xy0_off_pix);
+  //m_geometry->get_pixel_coord_indexes(iX, iY, isize, std::string(), 0, pix_scale_size, xy0_off_pix);
+  const double zplane=0;
+  m_geometry->get_pixel_xy_inds_at_z(iX, iY, isize, zplane, std::string(), 0, pix_scale_size, xy0_off_pix);
 
   //return PSCalib::GeometryAccess::img_from_pixel_arrays(iX, iY, &m_anda[0], isize);
   return m_geometry->ref_img_from_pixel_arrays(iX, iY, &m_anda[0], isize);

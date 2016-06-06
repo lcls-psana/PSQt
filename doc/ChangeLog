@@ -11,6 +11,10 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V00-00-21
+2012-06-06 Mikhail S. Dubrovin
+- in GeoImage.cpp use m_geometry->get_pixel_xy_inds_at_z in stead of get_pixel_coord_indexes
+	
 Tag: V00-00-20
 2012-02-13 Mikhail S. Dubrovin
 - WdgImage::setPixmapScailedImage - fix issue wiyth image re-zoom at segment motion
