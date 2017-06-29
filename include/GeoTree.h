@@ -5,12 +5,13 @@
 //#include "PSQt/WdgFile.h"
 
 //#include "PSQt/Frame.h"
+#include <QtWidgets>
 #include "PSCalib/GeometryAccess.h"
 #include "PSCalib/GeometryObject.h"
 #include <boost/shared_ptr.hpp>
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 namespace PSQt {

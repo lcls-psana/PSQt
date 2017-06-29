@@ -5,7 +5,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 #include "PSQt/Frame.h"

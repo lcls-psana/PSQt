@@ -46,10 +46,10 @@ MyWidget::MyWidget( QWidget *parent )
   QButtonGroup* radioGroup = new QButtonGroup();
 
   QComboBox* comboBox = new QComboBox();
-  comboBox->addItem(tr("Solid"), Qt::SolidLine);
-  comboBox->addItem(tr("Dash"),  Qt::DashLine);
-  comboBox->addItem(tr("Dot"),   Qt::DotLine);
-  comboBox->addItem(tr("None"),  Qt::NoPen);
+  comboBox->addItem(tr("Solid"), static_cast<int>(Qt::SolidLine));
+  comboBox->addItem(tr("Dash"),  static_cast<int>(Qt::DashLine));
+  comboBox->addItem(tr("Dot"),   static_cast<int>(Qt::DotLine));
+  comboBox->addItem(tr("None"),  static_cast<int>(Qt::NoPen));
 
   QCheckBox* checkBox = new QCheckBox(tr("QCh&eckBox"));
   checkBox->setChecked(true);

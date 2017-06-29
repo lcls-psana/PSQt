@@ -27,7 +27,7 @@
 //#include <QScrollArea>
 
 //#include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 

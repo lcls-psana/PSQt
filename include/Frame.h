@@ -1,7 +1,7 @@
 #ifndef FRAME_H
 #define FRAME_H
 
-#include <QtGui>
+#include <QtWidgets>
 //#include <QtCore>
 //#include <Qt>
 

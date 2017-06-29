@@ -9,7 +9,7 @@
 //#include <QPushButton>
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 //#include "PSQt/WdgImage.h"

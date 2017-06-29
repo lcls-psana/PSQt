@@ -7,7 +7,7 @@
 #include <QPixmap>
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 #include "PSQt/QGUtils.h"

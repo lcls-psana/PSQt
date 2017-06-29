@@ -9,7 +9,7 @@
 #include <QString>
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 #include "PSQt/Frame.h"

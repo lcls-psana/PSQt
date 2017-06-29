@@ -18,7 +18,7 @@
 #include <QMouseEvent>
 
 #include <QtCore>
-//#include <QtGui>
+//#include <QtWidgets>
 //#include <Qt>
 
 

@@ -4,7 +4,7 @@
 #define TESTTHREAD1_H
 
 //#include <Qt>
-//#include <QtGui>
+//#include <QtWidgets>
 //#include <QtCore>
 //#include <QApplication>
 #include <QThread>

@@ -5,7 +5,7 @@
 
 //#include <QPen>
 //#include <QBrash>
-#include <QWidget>
+#include <QtWidgets>
 #include <QPoint>
 #include <QPainterPath>
 #include <QGraphicsView>

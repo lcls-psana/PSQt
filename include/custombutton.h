@@ -5,7 +5,7 @@
 //Qt-articles.blogspot.com
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 namespace PSQt {

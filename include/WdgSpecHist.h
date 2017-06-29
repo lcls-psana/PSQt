@@ -10,7 +10,7 @@
 #include <QWidget>
 
 //#include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 

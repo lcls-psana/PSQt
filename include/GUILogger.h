@@ -5,7 +5,7 @@
 #include "PSQt/Logger.h"
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 

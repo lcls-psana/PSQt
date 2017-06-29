@@ -2,7 +2,7 @@
 #define LINES_H
 
 //#include <Qt>
-//#include <QtGui>
+//#include <QtWidgets>
 //#include <QtCore>
 
 #include <QWidget>

@@ -18,6 +18,7 @@
 
 #include <sstream>   // for stringstream
 #include <iostream>    // cout
+#include <cstdio>
 #include <fstream>    // ifstream(fname), ofstream
 
 //#include <dirent.h> // for DIR, dirent
@@ -203,9 +204,11 @@ GeoTree::currentChanged(const QModelIndex & index, const QModelIndex & index_old
   //std::cout << "currentChanged:: new r:" << index.row() << " c:" << index.column() 
   //                      << "     old r:" << index_old.row() << " c:" << index_old.column() << '\n';
 
-  QStandardItem *item = m_model->itemFromIndex(index);
+  if (index.isValid()){
+    cout << "VALID index into \"currentChanged()\" (GroTree.cpp, line:208)\n";
+    QStandardItem *item = m_model->itemFromIndex(index);
 
-  std::string str(item->text().toStdString());
+    std::string str(item->text().toStdString());
 
   //if(m_pbits & 4) {
   //  stringstream ss; ss << "currentChanged::item"
@@ -214,10 +217,16 @@ GeoTree::currentChanged(const QModelIndex & index, const QModelIndex & index_old
   //	    << " a:" << item->accessibleText().toStdString()
   //	    << " t:" << str; }
 
-  MsgInLog(_name_(), INFO, "Selected geometry object: " + str); 
+    MsgInLog(_name_(), INFO, "Selected geometry object: " + str); 
 
   //emit selectedText(str);
-  emit selectedGO(map_item_to_geo[item]);
+    emit selectedGO(map_item_to_geo[item]);
+
+  }
+  else{
+    cout << "INVALID index into \"currentChanged()\" (GroTree.cpp, line:227)\n";
+  }
+
 }
 
 //--------------------------

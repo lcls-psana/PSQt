@@ -12,7 +12,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 namespace PSQt {

@@ -18,7 +18,7 @@
 //#include <QPushButton>
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 namespace PSQt {

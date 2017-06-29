@@ -2,7 +2,7 @@
 #define WDGPOINTPOSITION3D_H
 
 #include <Qt>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 #include "PSQt/Frame.h"
