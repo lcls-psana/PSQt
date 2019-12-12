@@ -1,7 +1,6 @@
 #ifndef LABCOLORRING_H
 #define LABCOLORRING_H
 
-#include <QWidget>
 #include <QLabel>
 #include <QPainter>
 #include <QPixmap>
@@ -10,6 +9,7 @@
 #include <Qt>
 #include <QtGui>
 #include <QtCore>
+#include <QtWidgets>
 
 namespace PSQt {
 

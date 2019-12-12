@@ -7,11 +7,10 @@
 #include <PSQt/GUAxes.h>
 #include <PSQt/WdgColorBar.h>
 
-#include <QWidget>
-
 //#include <Qt>
 #include <QtGui>
 #include <QtCore>
+#include <QtWidgets>
 
 
 namespace PSQt {

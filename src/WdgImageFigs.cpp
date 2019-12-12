@@ -197,7 +197,7 @@ WdgImageFigs::closeEvent(QCloseEvent *e)
 void 
 WdgImageFigs::mousePressEvent(QMouseEvent *e)
 {
-  bool click_on_fig = m_dragstore -> containFigs(e->posF());
+  bool click_on_fig = m_dragstore -> containFigs(e->localPos());
 
   if(click_on_fig) {
       if(e->button() == Qt::MidButton) m_dragmode = DELETE;
@@ -242,7 +242,7 @@ WdgImageFigs::mouseReleaseEvent(QMouseEvent *e)
 
   if(m_dragmode == DELETE) m_dragstore -> deleteFig();
 
-  if(m_dragmode == MOVE) m_dragstore -> moveFigsIsCompleted(e->posF());
+  if(m_dragmode == MOVE) m_dragstore -> moveFigsIsCompleted(e->localPos());
 
   //std::cout << _name_() << "::mouseReleaseEvent:"
   //          << "  button: " << e->button()
@@ -279,7 +279,7 @@ WdgImageFigs::mouseMoveEvent(QMouseEvent *e)
 {
   if(m_dragmode == ZOOM) WdgImage::mouseMoveEvent(e);
 
-  if(m_dragmode == MOVE) m_dragstore -> moveFigs(e->posF());
+  if(m_dragmode == MOVE) m_dragstore -> moveFigs(e->localPos());
 
   //std::cout << "mouseMoveEvent: "
   //          << "  x(),y() = "  << e->x() << ", " << e->y()

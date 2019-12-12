@@ -6,7 +6,6 @@
 
 #include <PSQt/GUAxes.h>
 
-#include <QWidget>
 //#include <QLabel>
 //#include <QFrame>
 //#include <QPainter>
@@ -29,6 +28,7 @@
 //#include <Qt>
 #include <QtGui>
 #include <QtCore>
+#include <QtWidgets>
 
 
 namespace PSQt {

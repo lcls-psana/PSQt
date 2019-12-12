@@ -2,7 +2,6 @@
 #define PSQTGUIMAIN_H
 
 //#include <QVBox>
-//#include <QWidget>
 //#include <QLabel>
 //#include <QSlider>
 //#include <QPushButton>
@@ -10,6 +9,7 @@
 #include <Qt>
 #include <QtGui>
 #include <QtCore>
+#include <QtWidgets>
 
 namespace PSQt {
 
