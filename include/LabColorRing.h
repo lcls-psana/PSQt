@@ -42,8 +42,8 @@ class LabColorRing : public QLabel
 
  public:
 
-  static const float RAD2DEG = 180/3.14159265;
-  static const float DEG2RAD = 3.14159265/180;
+  static constexpr float RAD2DEG = 180/3.14159265;
+  static constexpr float DEG2RAD = 3.14159265/180;
 
   LabColorRing(QWidget* parent, const unsigned& ssize, float &h1, float &h2 );
 
