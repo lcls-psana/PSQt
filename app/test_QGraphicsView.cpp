@@ -5,7 +5,7 @@
 //#include <PSQt/GURuler.h>
 //#include <PSQt/GUView.h>
 
-#include <QtGui/QApplication>
+#include <qt/QtWidgets/QApplication>
 
 #include <cmath>     // for sin, cos
 #include <iostream>  // for std::cout
